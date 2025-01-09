@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:flutter_application_5/app2/user_info.dart';
+import 'package:flutter_application_5/contact_app/user_info.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

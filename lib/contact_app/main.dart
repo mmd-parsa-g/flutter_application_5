@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_5/app2/home.dart';
-import 'package:flutter_application_5/app2/user_info.dart';
+import 'package:flutter_application_5/contact_app/home.dart';
+import 'package:flutter_application_5/contact_app/user_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
