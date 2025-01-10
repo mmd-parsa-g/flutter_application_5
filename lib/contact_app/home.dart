@@ -15,6 +15,7 @@ class _HomeState extends State<Home> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+
   void addContact() {
     Box<UserInfo> contactBox = Hive.box<UserInfo>("userinfo");
     contactBox.add(UserInfo(
@@ -32,66 +33,65 @@ class _HomeState extends State<Home> {
           IconButton(
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text("Add Contact"),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextField(
-                              controller: _firstNameController,
-                              decoration:
-                                  const InputDecoration(hintText: "first Name"),
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Add Contact"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            controller: _firstNameController,
+                            decoration:
+                                const InputDecoration(hintText: "first Name"),
+                          ),
+                          TextField(
+                            controller: _lastNameController,
+                            decoration:
+                                const InputDecoration(hintText: "last Name"),
+                          ),
+                          TextField(
+                            controller: _phoneNumberController,
+                            decoration:
+                                const InputDecoration(hintText: "phone Number"),
+                          ),
+                          const SizedBox(height: 30),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    style: const ButtonStyle(
+                                        backgroundColor: WidgetStatePropertyAll(
+                                            Colors.black26)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      _firstNameController.clear();
+                                      _lastNameController.clear();
+                                      _phoneNumberController.clear();
+                                    },
+                                    child: const Text("Cancel")),
+                                TextButton(
+                                    style: const ButtonStyle(
+                                        backgroundColor: WidgetStatePropertyAll(
+                                            Colors.black26)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      addContact();
+                                      _firstNameController.clear();
+                                      _lastNameController.clear();
+                                      _phoneNumberController.clear();
+                                    },
+                                    child: const Text("Save Contact")),
+                              ],
                             ),
-                            TextField(
-                              controller: _lastNameController,
-                              decoration:
-                                  const InputDecoration(hintText: "last Name"),
-                            ),
-                            TextField(
-                              controller: _phoneNumberController,
-                              decoration: const InputDecoration(
-                                  hintText: "phone Number"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton(
-                                      style: const ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStatePropertyAll(
-                                                  Colors.black26)),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        _firstNameController.clear();
-                                        _lastNameController.clear();
-                                        _phoneNumberController.clear();
-                                      },
-                                      child: const Text("Cancel")),
-                                  TextButton(
-                                      style: const ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStatePropertyAll(
-                                                  Colors.black26)),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        addContact();
-                                        _firstNameController.clear();
-                                        _lastNameController.clear();
-                                        _phoneNumberController.clear();
-                                      },
-                                      child: const Text("Save Contact")),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               icon: const Icon(Icons.add))
         ],
@@ -112,6 +112,7 @@ class _HomeState extends State<Home> {
                     child: GridView.builder(
                       itemBuilder: (context, index) {
                         UserInfo? userInfo = box.getAt(index);
+
                         return Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -128,6 +129,18 @@ class _HomeState extends State<Home> {
                                   TextButton.icon(
                                     label: const Text('Edit'),
                                     onPressed: () {
+                                      final TextEditingController
+                                          firstNameController =
+                                          TextEditingController(
+                                              text: userInfo.firstName);
+                                      final TextEditingController
+                                          lastNameController =
+                                          TextEditingController(
+                                              text: userInfo.lastName);
+                                      final TextEditingController
+                                          phoneNumberController =
+                                          TextEditingController(
+                                              text: userInfo.number.toString());
                                       showDialog(
                                         context: context,
                                         builder: (context) {
@@ -138,7 +151,7 @@ class _HomeState extends State<Home> {
                                               children: [
                                                 TextField(
                                                   controller:
-                                                      _firstNameController,
+                                                      firstNameController,
                                                   decoration:
                                                       const InputDecoration(
                                                           hintText:
@@ -146,7 +159,7 @@ class _HomeState extends State<Home> {
                                                 ),
                                                 TextField(
                                                   controller:
-                                                      _lastNameController,
+                                                      lastNameController,
                                                   decoration:
                                                       const InputDecoration(
                                                           hintText:
@@ -154,54 +167,59 @@ class _HomeState extends State<Home> {
                                                 ),
                                                 TextField(
                                                   controller:
-                                                      _phoneNumberController,
+                                                      phoneNumberController,
                                                   decoration:
                                                       const InputDecoration(
                                                           hintText:
                                                               "phone Number"),
                                                 ),
+                                                const SizedBox(height: 30),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.all(10),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .spaceEvenly,
                                                     children: [
                                                       TextButton(
+                                                          style: const ButtonStyle(
+                                                              backgroundColor:
+                                                                  WidgetStatePropertyAll(
+                                                                      Colors
+                                                                          .black26)),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                              "Cancel")),
+                                                      TextButton(
+                                                          style: const ButtonStyle(
+                                                              backgroundColor:
+                                                                  WidgetStatePropertyAll(
+                                                                      Colors
+                                                                          .black26)),
                                                           onPressed: () {
                                                             final value = UserInfo(
                                                                 firstName:
-                                                                    _firstNameController
+                                                                    firstNameController
                                                                         .text,
                                                                 lastName:
-                                                                    _lastNameController
+                                                                    lastNameController
                                                                         .text,
                                                                 number: int.parse(
-                                                                    _phoneNumberController
+                                                                    phoneNumberController
                                                                         .text));
                                                             box.putAt(
                                                                 index, value);
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            _phoneNumberController
-                                                                .clear();
-                                                            _firstNameController
-                                                                .clear();
-                                                            _lastNameController
-                                                                .clear();
                                                           },
                                                           child: const Text(
                                                               "Save")),
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: const Text(
-                                                              "Cancel"))
                                                     ],
                                                   ),
                                                 )
